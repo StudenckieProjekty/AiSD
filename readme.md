@@ -13,7 +13,7 @@
 ### 📂 Struktura plików
 Każdy projekt ma swój oddzielny folder:
 1. [Algorytmy Sortowania](https://github.com/StudenckieProjekty/AiSD/tree/main/Zad1-AlgorytmySortowania)
-2. [Złożone struktury danych](https://github.com/StudenckieProjekty/AiSD/tree/main/Zad2-ZlozoneStrukturyDanych) (W.I.P.)
-3. Algorytmy grafowe (W.I.P.)
-4. Algorytmy z powracaniem (W.I.P.)
-5. Programowanie dynamiczne i problem plecakowy (W.I.P.)
+2. [Złożone struktury danych](https://github.com/StudenckieProjekty/AiSD/tree/main/Zad2-ZlozoneStrukturyDanych) (WIP)
+3. Algorytmy grafowe (TBD)
+4. Algorytmy z powracaniem (TBD)
+5. Programowanie dynamiczne i problem plecakowy (TBD)
