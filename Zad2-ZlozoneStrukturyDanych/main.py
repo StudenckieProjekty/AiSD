@@ -112,6 +112,9 @@ class tree:
         else: tree.createBST(globalVars.initialTreeList)
         print(globalVars.treeJson) # temp
 
+    def getRoot():
+        return next(i for i in globalVars.treeJson if globalVars.treeJson[i]["parent"] is None)
+
     def findMinMax():
         values = {
             "min": {
@@ -123,7 +126,7 @@ class tree:
                 "value": None
             }
         }
-        korzen = next(i for i in globalVars.treeJson if globalVars.treeJson[i]["parent"] is None)
+        korzen = tree.getRoot()
         for extremumType in values:
             currentNode = korzen
             values[extremumType]["value"] = currentNode
@@ -131,10 +134,44 @@ class tree:
                 currentNode = globalVars.treeJson[currentNode][values[extremumType]["direction"]]
                 values[extremumType]["value"] = currentNode
         print(f"Min: {values['min']['value']}\nMax: {values['max']['value']}")
+
+    def printPreOrder(currentNode = None):
+        if currentNode is None:
+            currentNode = tree.getRoot()
+            print(f" Pre-order: {currentNode}", end = "")
+        else: print(f", {currentNode}", end = "")
+        for direction in ["left", "right"]:
+            if globalVars.treeJson[currentNode][direction]:
+                tree.printPreOrder(globalVars.treeJson[currentNode][direction])       
+    
+    bFirstPreorderPrint = True
+    def printInOrder(currentNode = None):
+        if currentNode is None:
+            currentNode = tree.getRoot()
+            print(f"  In-order:", end = "")
+        for direction in ["left", "right"]:
+            if globalVars.treeJson[currentNode][direction]:
+                tree.printInOrder(globalVars.treeJson[currentNode][direction])
+            if direction == "left":
+                print(f"{' ' if tree.bFirstPreorderPrint else ', '}{currentNode}", end = "")
+                if tree.bFirstPreorderPrint: tree.bFirstPreorderPrint = False
+    
+    bFirstPostorderPrint = True
+    def printPostOrder(currentNode = None):
+        if currentNode is None:
+            currentNode = tree.getRoot()
+            print(f"Post-order:", end = "")
+        for direction in ["left", "right"]:
+            if globalVars.treeJson[currentNode][direction]:
+                tree.printPostOrder(globalVars.treeJson[currentNode][direction])
+        print(f"{' ' if tree.bFirstPostorderPrint else ', '}{currentNode}", end = "")
+        if tree.bFirstPostorderPrint: tree.bFirstPostorderPrint = False
         
     def print():
-        
-        return
+        tree.bFirstPreorderPrint, tree.bFirstPostorderPrint = [True, True]
+        tree.printPreOrder(); print()
+        tree.printInOrder(); print()
+        tree.printPostOrder(); print()
     
     def remove():
         whatToDo = validInputType("int", "remove> ")
