@@ -39,7 +39,7 @@ def validInputType(expectedType = None, inputMessage = None):
                 whatToDo = safeInput()
     return whatToDo
 
-class sortowator:
+class sortowator: # wziete prosto z Zad1
     def sortowaniePrzezWstawianie(tablica, indexPoczatku = 0, przyrost = 1): 
         for i in range(indexPoczatku + przyrost, len(tablica), przyrost):
             wartoscPodI = tablica[i]
@@ -67,28 +67,73 @@ class sortowator:
         return tablica
 
 class tree:
-    def createAVL(lista, i = None, j = None, parentId = None, bIsLeft = False):
+    def createAVL(lista, i = None, j = None, parentId = None, direction = None):
         if i == j == None:
             lista = sortowator.sortowanieShella(lista)
             i, j = [0, len(lista) - 1]
         elif j - i < 0: return
         indexMediany = (i + j) // 2
-        if parentId:
-            globalVars.treeJson[parentId]["left" if bIsLeft else "right"] = lista[indexMediany]
+        if parentId and direction:
+            globalVars.treeJson[parentId][direction] = lista[indexMediany]
         if not lista[indexMediany] in globalVars.treeJson:
             globalVars.treeJson[lista[indexMediany]] = {
                 "left": None,
                 "right": None,
                 "parent": parentId
             }
-        tree.createAVL(lista, i, indexMediany - 1, lista[indexMediany], True)
-        tree.createAVL(lista, indexMediany + 1, j, lista[indexMediany], False)
+        tree.createAVL(lista, i, indexMediany - 1, lista[indexMediany], "left")
+        tree.createAVL(lista, indexMediany + 1, j, lista[indexMediany], "right")
+    
+    def createBST(lista):
+        for i in range(len(lista)):
+            if not lista[i] in globalVars.treeJson:
+                globalVars.treeJson[lista[i]] = {
+                    "left": None,
+                    "right": None,
+                    "parent": None
+                }
+            poprzedniParent = lista[0]
+            while i != 0:
+                if lista[i] < poprzedniParent:
+                    if not globalVars.treeJson[poprzedniParent]["left"]:
+                        globalVars.treeJson[poprzedniParent]["left"] = lista[i]
+                        globalVars.treeJson[lista[i]]["parent"] = poprzedniParent
+                        break
+                    poprzedniParent = globalVars.treeJson[poprzedniParent]["left"]
+                else:
+                    if not globalVars.treeJson[poprzedniParent]["right"]:
+                        globalVars.treeJson[poprzedniParent]["right"] = lista[i]
+                        globalVars.treeJson[lista[i]]["parent"] = poprzedniParent
+                        break
+                    poprzedniParent = globalVars.treeJson[poprzedniParent]["right"]
     
     def create():
         if globalVars.treeType == "avl": tree.createAVL(globalVars.initialTreeList)
+        else: tree.createBST(globalVars.initialTreeList)
         print(globalVars.treeJson) # temp
+
+    def findMinMax():
+        values = {
+            "min": {
+                "direction": "left",
+                "value": None
+            },
+            "max": {
+                "direction": "right",
+                "value": None
+            }
+        }
+        korzen = next(i for i in globalVars.treeJson if globalVars.treeJson[i]["parent"] is None)
+        for extremumType in values:
+            currentNode = korzen
+            values[extremumType]["value"] = currentNode
+            while globalVars.treeJson[currentNode][values[extremumType]["direction"]]:
+                currentNode = globalVars.treeJson[currentNode][values[extremumType]["direction"]]
+                values[extremumType]["value"] = currentNode
+        print(f"Min: {values['min']['value']}\nMax: {values['max']['value']}")
         
     def print():
+        
         return
     
     def remove():
@@ -98,30 +143,42 @@ class tree:
 commandsJson = {
     "help": {
         "func": None,
+        "displayName": "Help",
         "desc": "Show this message."
     },
     "print": {
         "func": tree.print,
+        "displayName": "Print",
         "desc": "Print the tree using In-order, Pre-order, Post-order."
+    },
+    "findminmax": {
+        "func": tree.findMinMax,
+        "displayName": "FindMinMax",
+        "desc": "Prints the minimum and maximum values of the tree."
     },
     "remove": {
         "func": tree.remove,
+        "displayName": "Remove",
         "desc": "Remove elements of the tree."
     },
     "delete": {
         "func": None,
+        "displayName": "Delete",
         "desc": "Delete whole tree."
     },
     "export": {
         "func": None,
+        "displayName": "Export",
         "desc": "Export the tree to tickzpicture."
     },
     "rebalance": {
         "func": None,
+        "displayName": "Rebalance",
         "desc": "Rebalance the tree."
     },
     "exit": {
         "func": exitProgram,
+        "displayName": "Exit",
         "desc": "Exits the program (same as CTRL+D)."
     }
 }
@@ -131,7 +188,7 @@ class menu():
         if len(sys.argv) == 1: exitProgram(2, "U forgor about launch arguments. Try again")
         if len(sys.argv) != 3: exitProgram(2, "Wrong launch arguments. Try again")
         if not sys.argv[1].lower() == "--tree": exitProgram(2, "No --tree argument. Try again")
-        if not sys.argv[2].lower() in ["avl", "bst"]: exitProgram(2, "Invalid tree type in arg. Try Again")
+        if not sys.argv[2].lower() in ["avl", "bst"]: exitProgram(2, f"Invalid tree type in arg. {sys.argv[2]}? Never heard of it. Try Again")
         return sys.argv[2].lower()
 
     def help():
@@ -144,7 +201,7 @@ class menu():
         
         spacesCount = howManySpacesNum()
         for command in commandsJson:
-            print(f"{command.capitalize()}{' ' * (spacesCount - len(command))}{commandsJson[command]['desc']}")
+            print(f"{commandsJson[command]['displayName']}{' ' * (spacesCount - len(command))}{commandsJson[command]['desc']}")
     
     def action():
         print("action> ", end = "")
