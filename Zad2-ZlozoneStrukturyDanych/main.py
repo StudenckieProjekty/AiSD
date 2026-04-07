@@ -176,6 +176,17 @@ class tree:
     def remove():
         whatToDo = validInputType("int", "remove> ")
         safeInput()
+    
+    def export(node=None, bFirstRun=True):
+        if bFirstRun: node = tree.getRoot()
+        left, right = [globalVars.treeJson[node]["left"], globalVars.treeJson[node]["right"]]
+        if not left and not right: result = f"node {{{node}}}"
+        else:
+            lStr = f"child {{ {tree.export(left, False)} }}" if left else "child[missing] {}"
+            rStr = f"child {{ {tree.export(right, False)} }}" if right else "child[missing] {}"
+            result = f"node {{{node}}} {lStr} {rStr}"
+        if bFirstRun: print(f"Exported tree:\n\\{result};\n")
+        return result
 
 commandsJson = {
     "help": {
@@ -191,7 +202,7 @@ commandsJson = {
     "findminmax": {
         "func": tree.findMinMax,
         "displayName": "FindMinMax",
-        "desc": "Prints the minimum and maximum values of the tree."
+        "desc": "Print the minimum and maximum values of the tree."
     },
     "remove": {
         "func": tree.remove,
@@ -204,7 +215,7 @@ commandsJson = {
         "desc": "Delete whole tree."
     },
     "export": {
-        "func": None,
+        "func": tree.export,
         "displayName": "Export",
         "desc": "Export the tree to tickzpicture."
     },
