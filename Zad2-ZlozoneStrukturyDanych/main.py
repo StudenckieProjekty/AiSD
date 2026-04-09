@@ -1,3 +1,4 @@
+import math
 import sys
 sys.setrecursionlimit(2500000)
 
@@ -115,7 +116,7 @@ class tree:
     def getRoot():
         return next(i for i in globalVars.treeJson if globalVars.treeJson[i]["parent"] is None)
 
-    def findMinMax():
+    def findMinMax(korzen = None):
         values = {
             "min": {
                 "direction": "left",
@@ -126,7 +127,7 @@ class tree:
                 "value": None
             }
         }
-        korzen = tree.getRoot()
+        if not korzen: korzen = tree.getRoot()
         for extremumType in values:
             currentNode = korzen
             values[extremumType]["value"] = currentNode
@@ -134,6 +135,7 @@ class tree:
                 currentNode = globalVars.treeJson[currentNode][values[extremumType]["direction"]]
                 values[extremumType]["value"] = currentNode
         print(f"Min: {values['min']['value']}\nMax: {values['max']['value']}")
+        return values
 
     def printPreOrder(currentNode = None):
         if currentNode is None:
@@ -173,9 +175,46 @@ class tree:
         tree.printInOrder(); print()
         tree.printPostOrder(); print()
     
-    def remove():
-        whatToDo = validInputType("int", "remove> ")
-        safeInput()
+    def remove(nodeId = None):
+        if nodeId is None: nodeId = int(validInputType("int", "remove> "))
+        parentId = globalVars.treeJson[nodeId]["parent"]
+        if globalVars.treeJson[nodeId]["left"] is None and globalVars.treeJson[nodeId]["right"] is None:
+            for direction in ["left", "right"]:
+                if parentId is None: break
+                childId = globalVars.treeJson[parentId][direction]
+                if childId == nodeId:
+                    globalVars.treeJson[parentId][direction] = None
+                    break
+            del globalVars.treeJson[nodeId]
+        elif globalVars.treeJson[nodeId]["left"] is None or globalVars.treeJson[nodeId]["right"] is None:
+            childId, parentsNodeDirection = [None, None]
+            for direction in ["left", "right"]:
+                if globalVars.treeJson[nodeId][direction]:
+                    childId = globalVars.treeJson[nodeId][direction]
+            if childId is not None:
+                globalVars.treeJson[childId]["parent"] = parentId
+            if parentId is not None:
+                for direction in ["left", "right"]:
+                    if globalVars.treeJson[parentId][direction] == nodeId:
+                        parentsNodeDirection = direction
+                globalVars.treeJson[parentId][parentsNodeDirection] = childId
+            del globalVars.treeJson[nodeId]
+        else:
+            leftNodeId = globalVars.treeJson[nodeId]["left"]
+            nodeIdToReplace = tree.findMinMax(leftNodeId)["max"]["value"]
+            tree.remove(nodeIdToReplace)
+            globalVars.treeJson[nodeIdToReplace] = globalVars.treeJson[nodeId].copy()
+            for direction in ["left", "right"]:
+                childId = globalVars.treeJson[nodeIdToReplace][direction]
+                if childId is None: continue
+                globalVars.treeJson[childId]["parent"] = nodeIdToReplace
+            if globalVars.treeJson[nodeId]["parent"] is not None:
+                parentId = globalVars.treeJson[nodeId]["parent"]
+                for direction in ["left", "right"]:
+                    if globalVars.treeJson[parentId][direction] == nodeId:
+                        globalVars.treeJson[parentId][direction] = nodeIdToReplace
+            del globalVars.treeJson[nodeId]
+        print(globalVars.treeJson) # temp
     
     def export(node=None, bFirstRun=True):
         if bFirstRun: node = tree.getRoot()
@@ -187,7 +226,53 @@ class tree:
             result = f"node {{{node}}} {lStr} {rStr}"
         if bFirstRun: print(f"Exported tree:\n\\{result};\n")
         return result
-
+    
+    def rotate(pivotId, rotatorId, direction):
+        getOppositeDirection = {
+            "left": "right",
+            "right": "left"
+        }
+        pivotChildId = globalVars.treeJson[pivotId][direction]
+        globalVars.treeJson[rotatorId][getOppositeDirection[direction]] = pivotChildId
+        if pivotChildId is not None: globalVars.treeJson[pivotChildId]["parent"] = rotatorId
+        globalVars.treeJson[pivotId][direction] = rotatorId
+        rotatorParentId = globalVars.treeJson[rotatorId]["parent"]
+        if rotatorParentId is not None:
+            for direction2 in ["left", "right"]:
+                if globalVars.treeJson[rotatorParentId][direction2] == rotatorId:
+                    globalVars.treeJson[rotatorParentId][direction2] = pivotId
+                    break
+        globalVars.treeJson[pivotId]["parent"] = rotatorParentId
+        globalVars.treeJson[rotatorId]["parent"] = pivotId
+        
+    def rebalance():
+        nodeId = tree.getRoot()
+        while True:
+            nodeLeftId = globalVars.treeJson[nodeId]["left"]
+            while nodeLeftId is not None:
+                tree.rotate(nodeLeftId, nodeId, "right")
+                nodeId, nodeLeftId = [nodeLeftId, globalVars.treeJson[nodeLeftId]["left"]]
+            nodeRightId = globalVars.treeJson[nodeId]["right"]
+            if nodeRightId is not None: nodeId = nodeRightId
+            else: break
+        wsp = math.floor(math.log2(globalVars.nodesCount + 1))
+        liczbaRotacji = globalVars.nodesCount + 1 - 2 ** wsp
+        nodeId = tree.getRoot()
+        for i in range(liczbaRotacji):
+            rChildId = globalVars.treeJson[nodeId]["right"]
+            if rChildId is None: break
+            tree.rotate(rChildId, nodeId, "left")
+            nodeId = globalVars.treeJson[rChildId]["right"]
+        y = globalVars.nodesCount - liczbaRotacji
+        while y > 1:
+            nodeId = tree.getRoot()
+            for i in range(math.floor(y / 2)):
+                rChildId = globalVars.treeJson[nodeId]["right"]
+                if rChildId is None: break
+                tree.rotate(rChildId, nodeId, "left")
+                nodeId = globalVars.treeJson[rChildId]["right"]
+            y = y // 2
+        
 commandsJson = {
     "help": {
         "func": None,
@@ -220,7 +305,7 @@ commandsJson = {
         "desc": "Export the tree to tickzpicture."
     },
     "rebalance": {
-        "func": None,
+        "func": tree.rebalance,
         "displayName": "Rebalance",
         "desc": "Rebalance the tree."
     },
