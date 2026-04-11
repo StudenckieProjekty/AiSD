@@ -111,7 +111,7 @@ class tree:
     def create():
         if globalVars.treeType == "avl": tree.createAVL(globalVars.initialTreeList)
         else: tree.createBST(globalVars.initialTreeList)
-        print(globalVars.treeJson) # temp
+        #print(globalVars.treeJson) # temp
 
     def getRoot():
         return next(i for i in globalVars.treeJson if globalVars.treeJson[i]["parent"] is None)
@@ -175,8 +175,7 @@ class tree:
         tree.printInOrder(); print()
         tree.printPostOrder(); print()
     
-    def remove(nodeId = None):
-        if nodeId is None: nodeId = int(validInputType("int", "remove> "))
+    def remove(nodeId):
         parentId = globalVars.treeJson[nodeId]["parent"]
         if globalVars.treeJson[nodeId]["left"] is None and globalVars.treeJson[nodeId]["right"] is None:
             for direction in ["left", "right"]:
@@ -214,9 +213,25 @@ class tree:
                     if globalVars.treeJson[parentId][direction] == nodeId:
                         globalVars.treeJson[parentId][direction] = nodeIdToReplace
             del globalVars.treeJson[nodeId]
-        print(globalVars.treeJson) # temp
+        #print(globalVars.treeJson) # temp
     
-    def export(node=None, bFirstRun=True):
+    def removeInput():
+        nodesToRemove = validInputType("list", "remove> ").split()
+        for nodeId in nodesToRemove:
+            nodeId = int(nodeId)
+            if not nodeId in globalVars.treeJson: continue 
+            tree.remove(nodeId)
+            globalVars.nodesCount -= 1
+        
+    def delete(currentNode = None):
+        if currentNode is None: currentNode = tree.getRoot()
+        for direction in ["left", "right"]:
+            if globalVars.treeJson[currentNode][direction]:
+                tree.delete(globalVars.treeJson[currentNode][direction])
+                globalVars.nodesCount -= 1
+        tree.remove(currentNode)
+    
+    def export(node = None, bFirstRun = True):
         if bFirstRun: node = tree.getRoot()
         left, right = [globalVars.treeJson[node]["left"], globalVars.treeJson[node]["right"]]
         if not left and not right: result = f"node {{{node}}}"
@@ -290,12 +305,12 @@ commandsJson = {
         "desc": "Print the minimum and maximum values of the tree."
     },
     "remove": {
-        "func": tree.remove,
+        "func": tree.removeInput,
         "displayName": "Remove",
         "desc": "Remove elements of the tree."
     },
     "delete": {
-        "func": None,
+        "func": tree.delete,
         "displayName": "Delete",
         "desc": "Delete whole tree."
     },
@@ -355,9 +370,9 @@ class menu():
             print(f"The amount of elements in the list is not equal to the nodes count ({globalVars.nodesCount} vs {len(treeList)}). Try again")
             treeList = validInputType("list", "insert> ").split()
         globalVars.initialTreeList = list(map(int, treeList))
-        print(globalVars.treeType) # temp
-        print(globalVars.nodesCount) # temp
-        print(globalVars.initialTreeList) # temp
+        #print(globalVars.treeType) # temp
+        #print(globalVars.nodesCount) # temp
+        #print(globalVars.initialTreeList) # temp
         tree.create()
         while True:
             menu.action()
