@@ -1,5 +1,5 @@
 <div align=center>
-  <img src="../images/zad2.png" alt="Złożone struktury danych">  
+  <img src="/images/zad2.png" alt="Złożone struktury danych">  
 </div>
 
 ---

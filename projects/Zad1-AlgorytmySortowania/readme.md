@@ -1,5 +1,5 @@
 <div align=center>
-  <img src="../images/zad1.png" alt="Algorytmy Sortowania">  
+  <img src="/images/zad1.png" alt="Algorytmy Sortowania">  
 </div>
 
 ---
