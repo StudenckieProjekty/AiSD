@@ -1,5 +1,5 @@
 <div align=center>
-  <img src="banner.png" alt="Algorytmy i Struktury Danych">
+  <img src="./images/banner.png" alt="Algorytmy i Struktury Danych">
 
   ### Source code projektów tworzonych na przedmiot o owej nazwie.
   <br>
@@ -12,8 +12,8 @@
 
 ### 📂 Struktura plików
 Każdy projekt ma swój oddzielny folder:
-1. [Algorytmy Sortowania](https://github.com/StudenckieProjekty/AiSD/tree/main/Zad1-AlgorytmySortowania)
-2. [Złożone struktury danych](https://github.com/StudenckieProjekty/AiSD/tree/main/Zad2-ZlozoneStrukturyDanych) (WIP)
-3. Algorytmy grafowe (TBD)
-4. Algorytmy z powracaniem (TBD)
-5. Programowanie dynamiczne i problem plecakowy (TBD)
+1. [Algorytmy sortowania](./projects/Zad1-AlgorytmySortowania)
+2. [Złożone struktury danych](./projects/Zad2-ZlozoneStrukturyDanych) (WIP)
+3. [Algorytmy grafowe](./projects/Zad3-AlgorytmyGrafowe) (TBD)
+4. [Algorytmy z powracaniem](./projects/Zad4-AlgorytmyZPowracaniem) (TBD)
+5. [Programowanie dynamiczne i problem plecakowy](./projects/Zad5-ProgramowanieDynamiczne) (TBD)
