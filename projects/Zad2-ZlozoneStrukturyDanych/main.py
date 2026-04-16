@@ -111,7 +111,6 @@ class tree:
     def create():
         if globalVars.treeType == "avl": tree.createAVL(globalVars.initialTreeList)
         else: tree.createBST(globalVars.initialTreeList)
-        #print(globalVars.treeJson) # temp
 
     def getRoot():
         return next(i for i in globalVars.treeJson if globalVars.treeJson[i]["parent"] is None)
@@ -213,7 +212,6 @@ class tree:
                     if globalVars.treeJson[parentId][direction] == nodeId:
                         globalVars.treeJson[parentId][direction] = nodeIdToReplace
             del globalVars.treeJson[nodeId]
-        #print(globalVars.treeJson) # temp
     
     def removeInput():
         nodesToRemove = validInputType("list", "remove> ").split()
@@ -228,8 +226,8 @@ class tree:
         for direction in ["left", "right"]:
             if globalVars.treeJson[currentNode][direction]:
                 tree.delete(globalVars.treeJson[currentNode][direction])
-                globalVars.nodesCount -= 1
         tree.remove(currentNode)
+        globalVars.nodesCount -= 1
     
     def export(node = None, bFirstRun = True):
         if bFirstRun: node = tree.getRoot()
@@ -338,6 +336,16 @@ class menu():
         if not sys.argv[1].lower() == "--tree": exitProgram(2, "No --tree argument. Try again")
         if not sys.argv[2].lower() in ["avl", "bst"]: exitProgram(2, f"Invalid tree type in arg. {sys.argv[2]}? Never heard of it. Try Again")
         return sys.argv[2].lower()
+    
+    def inputToTree():
+        treeList = validInputType("list", "insert> ").split()
+        while len(treeList) != globalVars.nodesCount:
+            print(f"The amount of elements in the list is not equal to the nodes count ({globalVars.nodesCount} vs {len(treeList)}). Try again")
+            treeList = validInputType("list", "insert> ").split()
+        while len(treeList) != len(set(treeList)):
+            print(f"The provided list contains duplicate nodes! There must be no duplicates. Try again")
+            treeList = validInputType("list", "insert> ").split()
+        return list(map(int, treeList))
 
     def help():
         def howManySpacesNum():
@@ -359,22 +367,17 @@ class menu():
                 print("Unknown command. Try \"help\" for a list of commands\naction> ", end = "")
                 whatToDo = safeInput()
         except EOFError: whatToDo = "exit"
-        commandsJson[whatToDo.lower()]["func"]()
+        if globalVars.nodesCount == 0 and whatToDo not in ["exit", "help"]:
+            print(f"You deleted the tree. You cannot {commandsJson[whatToDo.lower()]['displayName']}!")
+            print("Why are we still here? Just to suffer?")
+        else: commandsJson[whatToDo.lower()]["func"]()
     
     def main():
         commandsJson["help"]["func"] = menu.help
         globalVars.treeType = menu.getTreeType()
         globalVars.nodesCount = int(validInputType("intpos", " nodes> "))
-        treeList = validInputType("list", "insert> ").split()
-        while len(treeList) != globalVars.nodesCount:
-            print(f"The amount of elements in the list is not equal to the nodes count ({globalVars.nodesCount} vs {len(treeList)}). Try again")
-            treeList = validInputType("list", "insert> ").split()
-        globalVars.initialTreeList = list(map(int, treeList))
-        #print(globalVars.treeType) # temp
-        #print(globalVars.nodesCount) # temp
-        #print(globalVars.initialTreeList) # temp
+        globalVars.initialTreeList = menu.inputToTree()
         tree.create()
-        while True:
-            menu.action()
+        while True: menu.action()
 
 if __name__ == "__main__": menu.main()
