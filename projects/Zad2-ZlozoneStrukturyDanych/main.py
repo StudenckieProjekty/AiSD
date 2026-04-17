@@ -143,9 +143,9 @@ class tree:
         else: print(f", {currentNode}", end = "")
         for direction in ["left", "right"]:
             if globalVars.treeJson[currentNode][direction]:
-                tree.printPreOrder(globalVars.treeJson[currentNode][direction])       
+                tree.printPreOrder(globalVars.treeJson[currentNode][direction])  
     
-    bFirstPreorderPrint = True
+    bFirstInOrderPrint = True
     def printInOrder(currentNode = None):
         if currentNode is None:
             currentNode = tree.getRoot()
@@ -154,8 +154,8 @@ class tree:
             if globalVars.treeJson[currentNode][direction]:
                 tree.printInOrder(globalVars.treeJson[currentNode][direction])
             if direction == "left":
-                print(f"{' ' if tree.bFirstPreorderPrint else ', '}{currentNode}", end = "")
-                if tree.bFirstPreorderPrint: tree.bFirstPreorderPrint = False
+                print(f"{' ' if tree.bFirstInOrderPrint else ', '}{currentNode}", end = "")
+                if tree.bFirstInOrderPrint: tree.bFirstInOrderPrint = False
     
     bFirstPostorderPrint = True
     def printPostOrder(currentNode = None):
@@ -169,7 +169,7 @@ class tree:
         if tree.bFirstPostorderPrint: tree.bFirstPostorderPrint = False
         
     def print():
-        tree.bFirstPreorderPrint, tree.bFirstPostorderPrint = [True, True]
+        tree.bFirstInOrderPrint, tree.bFirstPostorderPrint = [True, True]
         tree.printPreOrder(); print()
         tree.printInOrder(); print()
         tree.printPostOrder(); print()

@@ -13,7 +13,7 @@
 ### 📂 Struktura plików
 Każdy projekt ma swój oddzielny folder:
 1. [Algorytmy sortowania](./projects/Zad1-AlgorytmySortowania)
-2. [Złożone struktury danych](./projects/Zad2-ZlozoneStrukturyDanych) (WIP)
+2. [Złożone struktury danych](./projects/Zad2-ZlozoneStrukturyDanych)
 3. [Algorytmy grafowe](./projects/Zad3-AlgorytmyGrafowe) (TBD)
 4. [Algorytmy z powracaniem](./projects/Zad4-AlgorytmyZPowracaniem) (TBD)
 5. [Programowanie dynamiczne i problem plecakowy](./projects/Zad5-ProgramowanieDynamiczne) (TBD)
