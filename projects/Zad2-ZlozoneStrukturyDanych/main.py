@@ -1,5 +1,6 @@
 import math
 import sys
+import time
 sys.setrecursionlimit(2500000)
 
 class globalVars:
@@ -7,6 +8,7 @@ class globalVars:
     nodesCount = 0
     initialTreeList = []
     treeJson = {}
+    bBenchmarkMode = False
 
 def exitProgram(statusCode = 0, message = ""):
     print(f"\n{f'{message}\n' if message else ''}Program exited with status: {statusCode}")
@@ -39,6 +41,15 @@ def validInputType(expectedType = None, inputMessage = None):
                 if inputMessage: print(inputMessage, end = "")
                 whatToDo = safeInput()
     return whatToDo
+
+def callFunction(funcName):
+    if globalVars.bBenchmarkMode and commandsJson[funcName]["bBenchmark"]:
+        startTime = time.perf_counter()
+        commandsJson[funcName]["function"]()
+        endTime = time.perf_counter()
+        execTime = endTime - startTime
+        print(f"\n{commandsJson[funcName]['displayName']} benchmarked time: ({execTime:.6f} s)")
+    else: commandsJson[funcName]["function"]()
 
 class sortowator: # wziete prosto z Zad1
     def sortowaniePrzezWstawianie(tablica, indexPoczatku = 0, przyrost = 1): 
@@ -170,9 +181,9 @@ class tree:
         
     def print():
         tree.bFirstInOrderPrint, tree.bFirstPostorderPrint = [True, True]
-        tree.printPreOrder(); print()
-        tree.printInOrder(); print()
-        tree.printPostOrder(); print()
+        callFunction("printpreorder"); print()
+        callFunction("printinorder"); print()
+        callFunction("printpostorder"); print()
     
     def remove(nodeId):
         parentId = globalVars.treeJson[nodeId]["parent"]
@@ -287,55 +298,101 @@ class tree:
             y = y // 2
         
 commandsJson = {
+    "create": {
+        "function": tree.create,
+        "displayName": "Create",
+        "description": "Creates a BST or AVL tree.",
+        "bHideFromUser": True,
+        "bBenchmark": True
+    },
     "help": {
-        "func": None,
+        "function": None,
         "displayName": "Help",
-        "desc": "Show this message."
+        "description": "Show this message.",
+        "bHideFromUser": False,
+        "bBenchmark": False
     },
     "print": {
-        "func": tree.print,
+        "function": tree.print,
         "displayName": "Print",
-        "desc": "Print the tree using In-order, Pre-order, Post-order."
+        "description": "Print the tree using In-order, Pre-order, Post-order.",
+        "bHideFromUser": False,
+        "bBenchmark": False
+    },
+    "printinorder": {
+        "function": tree.printInOrder,
+        "displayName": "In-order",
+        "description": "Print the tree using In-order",
+        "bHideFromUser": True,
+        "bBenchmark": True
+    },
+    "printpreorder": {
+        "function": tree.printPreOrder,
+        "displayName": "Pre-order",
+        "description": "Print the tree using Pre-order.",
+        "bHideFromUser": True,
+        "bBenchmark": True
+    },
+    "printpostorder": {
+        "function": tree.printPostOrder,
+        "displayName": "Post-order",
+        "description": "Print the tree using Post-order.",
+        "bHideFromUser": True,
+        "bBenchmark": True
     },
     "findminmax": {
-        "func": tree.findMinMax,
+        "function": tree.findMinMax,
         "displayName": "FindMinMax",
-        "desc": "Print the minimum and maximum values of the tree."
+        "description": "Print the minimum and maximum values of the tree.",
+        "bHideFromUser": False,
+        "bBenchmark": True
     },
     "remove": {
-        "func": tree.removeInput,
+        "function": tree.removeInput,
         "displayName": "Remove",
-        "desc": "Remove elements of the tree."
+        "description": "Remove elements of the tree.",
+        "bHideFromUser": False,
+        "bBenchmark": True
     },
     "delete": {
-        "func": tree.delete,
+        "function": tree.delete,
         "displayName": "Delete",
-        "desc": "Delete whole tree."
+        "description": "Delete whole tree.",
+        "bHideFromUser": False,
+        "bBenchmark": True
     },
     "export": {
-        "func": tree.export,
+        "function": tree.export,
         "displayName": "Export",
-        "desc": "Export the tree to tickzpicture."
+        "description": "Export the tree to tickzpicture.",
+        "bHideFromUser": False,
+        "bBenchmark": True
     },
     "rebalance": {
-        "func": tree.rebalance,
+        "function": tree.rebalance,
         "displayName": "Rebalance",
-        "desc": "Rebalance the tree."
+        "description": "Rebalance the tree.",
+        "bHideFromUser": False,
+        "bBenchmark": True
     },
     "exit": {
-        "func": exitProgram,
+        "function": exitProgram,
         "displayName": "Exit",
-        "desc": "Exits the program (same as CTRL+D)."
+        "description": "Exits the program (same as CTRL+D).",
+        "bHideFromUser": False,
+        "bBenchmark": False
     }
 }
 
 class menu():
     def getTreeType():
         if len(sys.argv) == 1: exitProgram(2, "U forgor about launch arguments. Try again")
-        if len(sys.argv) != 3: exitProgram(2, "Wrong launch arguments. Try again")
+        if len(sys.argv) not in [3, 4]: exitProgram(2, "Wrong launch arguments. Try again")
         if not sys.argv[1].lower() == "--tree": exitProgram(2, "No --tree argument. Try again")
         if not sys.argv[2].lower() in ["avl", "bst"]: exitProgram(2, f"Invalid tree type in arg. {sys.argv[2]}? Never heard of it. Try Again")
         return sys.argv[2].lower()
+    
+    def getBenchmarkFlag(): return "--benchmark" in [i.lower() for i in sys.argv]
     
     def inputToTree():
         treeList = validInputType("list", "insert> ").split()
@@ -357,27 +414,29 @@ class menu():
         
         spacesCount = howManySpacesNum()
         for command in commandsJson:
-            print(f"{commandsJson[command]['displayName']}{' ' * (spacesCount - len(command))}{commandsJson[command]['desc']}")
+            if commandsJson[command]["bHideFromUser"]: continue
+            print(f"{commandsJson[command]['displayName']}{' ' * (spacesCount - len(command))}{commandsJson[command]['description']}")
     
     def action():
         print("action> ", end = "")
         try:
             whatToDo = safeInput()
-            while whatToDo.lower() not in commandsJson.keys():
+            while whatToDo.lower() not in [i for i in commandsJson.keys() if not commandsJson[i]["bHideFromUser"]]:
                 print("Unknown command. Try \"help\" for a list of commands\naction> ", end = "")
                 whatToDo = safeInput()
         except EOFError: whatToDo = "exit"
-        if globalVars.nodesCount == 0 and whatToDo not in ["exit", "help"]:
+        if globalVars.nodesCount == 0 and whatToDo.lower() not in ["exit", "help"]:
             print(f"You deleted the tree. You cannot {commandsJson[whatToDo.lower()]['displayName']}!")
             print("Why are we still here? Just to suffer?")
-        else: commandsJson[whatToDo.lower()]["func"]()
+        else: callFunction(whatToDo.lower())
     
     def main():
-        commandsJson["help"]["func"] = menu.help
+        commandsJson["help"]["function"] = menu.help
         globalVars.treeType = menu.getTreeType()
         globalVars.nodesCount = int(validInputType("intpos", " nodes> "))
         globalVars.initialTreeList = menu.inputToTree()
-        tree.create()
+        globalVars.bBenchmarkMode = menu.getBenchmarkFlag()
+        callFunction("create")
         while True: menu.action()
 
 if __name__ == "__main__": menu.main()
