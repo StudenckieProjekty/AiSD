@@ -10,10 +10,14 @@
 
 ---
 
-### 📂 Struktura plików
-Każdy projekt ma swój oddzielny folder:
-1. [Algorytmy sortowania](./projects/Zad1-AlgorytmySortowania)
-2. [Złożone struktury danych](./projects/Zad2-ZlozoneStrukturyDanych)
-3. [Algorytmy grafowe](./projects/Zad3-AlgorytmyGrafowe) (TBD)
-4. [Algorytmy z powracaniem](./projects/Zad4-AlgorytmyZPowracaniem) (TBD)
-5. [Programowanie dynamiczne i problem plecakowy](./projects/Zad5-ProgramowanieDynamiczne) (TBD)
+### Wykonane zadania
+
+| Nr | Nazwa zadania | Odnośnik | Ocena za Projekt | Ocena za Sprawozdanie |
+|:---:|---|:---:|:---:|:---:|
+| 1 | Algorytmy sortowania | [Folder](./projects/Zad1-AlgorytmySortowania) | 5.5 | 5.5 |
+| 2 | Złożone struktury danych | [Folder](./projects/Zad2-ZlozoneStrukturyDanych) | 5.5 | - |
+| 3 | Algorytmy grafowe (WIP) | [Folder](./projects/Zad3-AlgorytmyGrafowe) | - | - |
+| 4 | Algorytmy z powracaniem (TBD) | [Folder](./projects/Zad4-AlgorytmyZPowracaniem) | - | - |
+| 5 | Programowanie dynamiczne i problem plecakowy (TBD) | [Folder](./projects/Zad5-ProgramowanieDynamiczne) | - | - |
+
+> Ocena 5.5 stanowi "bufor bezpieczeństwa" pozwalający utrzymać końcową ocenę 5.0 w przypadku ewentualnych przyszłych potknięć.
