@@ -7,6 +7,8 @@ sys.setrecursionlimit(2500000)
 
 class gVars:
     selectedRep = None
+    nodes = None
+    saturation = None
 
 parser = argparse.ArgumentParser(add_help=False)
 parser.add_argument("--generate", action="store_true")
@@ -39,7 +41,7 @@ commandsJson = {
         "bBenchmark": False
     },
     "print": {
-        "function": graf.print,
+        "function": graf.printM,
         "displayName": "Print",
         "description": "Print the Graph in selected data structure.",
         "bHideFromUser": False,
@@ -69,10 +71,15 @@ class menu():
             print(f"{commandsJson[command]['displayName']}{' ' * (spacesCount - len(command))}{commandsJson[command]['description']}")
     
     def selectGraphRepresentation():
-        gVars.selectedRep = utils.validInputInList(["matrix", "list", "table"], " type> ", "Invalid representation! Expected: matrix, list or table.")
+        gVars.selectedRep = utils.inputs.validInList(["matrix", "list", "table"], "type> ", "Invalid type! Expected: matrix, list or table.")
     
     def inputAndInitGraf():
-        nodesCount = utils.validInputType("intpos", "nodes> ")
+        gVars.nodes = int(utils.inputs.validPositiveNumber("nodes> ", 2))
+        if args.generate:
+            gVars.saturation = float(utils.inputs.validPositiveNumber("saturation> ", utils.getMinSaturation(gVars.nodes), 100, float))
+            graf.argGenerate(gVars.nodes, gVars.saturation)
+        elif args.user_provided:
+            graf.argUserProvided(gVars.nodes)
 
     def action():
         print("action> ", end = "")
@@ -83,9 +90,10 @@ class menu():
                 whatToDo = utils.safeInput()
         except EOFError: whatToDo = "exit"
         callFunction(whatToDo.lower())
-    
+
     def main():
         commandsJson["help"]["function"] = menu.help
+        if (not args.generate) and (not args.user_provided): utils.exitProgram(1, "U forgor about a --generate or --user-provided flag.")
         menu.selectGraphRepresentation()
         menu.inputAndInitGraf()
         while True: menu.action()
