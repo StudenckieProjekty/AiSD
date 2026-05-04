@@ -1,6 +1,9 @@
 #!/bin/bash
 
-sizesList=(1000 5000 10000 20000 30000 40000 50000)
+sizesList=()
+for ((i=10; i<=16; i++)); do
+    sizesList+=($((2**i)))
+done
 iterationsCount=4
 resultsFile="wynikiBenchmarkow.csv"
 

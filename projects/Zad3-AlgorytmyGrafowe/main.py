@@ -5,11 +5,6 @@ import graf
 import utils
 sys.setrecursionlimit(2500000)
 
-class gVars:
-    selectedRep = None
-    nodes = None
-    saturation = None
-
 parser = argparse.ArgumentParser(add_help=False)
 parser.add_argument("--generate", action="store_true")
 parser.add_argument("--user-provided", action="store_true")
@@ -26,24 +21,17 @@ def callFunction(funcName):
     else: commandsJson[funcName]["function"]()
 
 commandsJson = {
-    "create": {
-        "function": graf.create,
-        "displayName": "Create",
-        "description": "Creates a Graph.",
-        "bHideFromUser": True,
-        "bBenchmark": True
-    },
     "help": {
         "function": None,
         "displayName": "Help",
-        "description": "Show this message.",
+        "description": "Shows this message.",
         "bHideFromUser": False,
         "bBenchmark": False
     },
     "print": {
-        "function": graf.printM,
+        "function": graf.Print,
         "displayName": "Print",
-        "description": "Print the Graph in selected data structure.",
+        "description": "Prints the Graph in selected data structure.",
         "bHideFromUser": False,
         "bBenchmark": False
     },
@@ -71,15 +59,15 @@ class menu():
             print(f"{commandsJson[command]['displayName']}{' ' * (spacesCount - len(command))}{commandsJson[command]['description']}")
     
     def selectGraphRepresentation():
-        gVars.selectedRep = utils.inputs.validInList(["matrix", "list", "table"], "type> ", "Invalid type! Expected: matrix, list or table.")
+        utils.selectedRep = utils.inputs.validInList(["matrix", "list", "table"], "type> ", "Invalid type! Expected: matrix, list or table.")
     
     def inputAndInitGraf():
-        gVars.nodes = int(utils.inputs.validPositiveNumber("nodes> ", 2))
+        utils.nodes = int(utils.inputs.validPositiveNumber("nodes> ", 2))
         if args.generate:
-            gVars.saturation = float(utils.inputs.validPositiveNumber("saturation> ", utils.getMinSaturation(gVars.nodes), 100, float))
-            graf.argGenerate(gVars.nodes, gVars.saturation)
+            utils.saturation = float(utils.inputs.validPositiveNumber("saturation> ", utils.getMinSaturation(utils.nodes), 100, float))
+            graf.argGenerate(utils.nodes, utils.saturation)
         elif args.user_provided:
-            graf.argUserProvided(gVars.nodes)
+            graf.argUserProvided(utils.nodes)
 
     def action():
         print("action> ", end = "")

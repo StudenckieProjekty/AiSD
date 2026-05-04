@@ -2,29 +2,54 @@ import reps.matrix
 import reps.list
 import reps.table
 import utils
-import math
+import random
+
+convFromTo = {
+    "matrix": {
+        "list": reps.list.convFromMatrix,
+        "table": reps.table.convFromMatrix
+    },
+    "list": {
+        "matrix": reps.matrix.convFromList,
+        "table": reps.table.convFromList
+    },
+    "table": {
+        "matrix": reps.matrix.convFromTable,
+        "list": reps.list.convFromTable
+    }
+}
 
 def argGenerate(nodes, saturation):
-    matrix = [[0] * (nodes + 1) for i in range(nodes + 1)]
+    matrix = reps.matrix.getMatrixFilledWithZeros(nodes + 1)
     for i in range(1, nodes): # Wypelnienie nad przekątną po prawej zeby byl na pewno spojny
         matrix[i][i + 1] = 1
     maxEdgesAmount = nodes * (nodes - 1) // 2
     jedynkiLeftToPlace = round((saturation / 100) * maxEdgesAmount) - (nodes - 1)
-    for i in range(1, nodes - 1): # Wypelnienie resztą jedynek jesli mozna
-        if jedynkiLeftToPlace <= 0: break
+    allowedCoordinates = [] # Kandydaci koordynatowi zeby do nich jedynke dac
+    for i in range(1, nodes - 1):
         for j in range(2 + i, nodes + 1):
-            if jedynkiLeftToPlace <= 0: break
+            allowedCoordinates.append([i, j])
+    if jedynkiLeftToPlace > 0:
+        for i, j in random.sample(allowedCoordinates, jedynkiLeftToPlace):
             matrix[i][j] = 1
-            jedynkiLeftToPlace -= 1
-    utils.grafInMatrix = matrix
+    if utils.selectedRep == "matrix": utils.grafIn["matrix"] = matrix
+    else: convFromTo["matrix"][utils.selectedRep](matrix, utils.nodes)
 
 def argUserProvided(nodes):
+    lista = [[]]
     for i in range(1, nodes + 1):
         values = utils.inputs.validListOrEmpty(f"{i}> ", nodes).split()
-        utils.grafInList.append(list(map(int, values)))
+        lista.append(list(map(int, values)))
+    if utils.selectedRep == "list": utils.grafIn["list"] = lista
+    else: convFromTo["list"][utils.selectedRep](lista, utils.nodes)
 
-def create():
-    return
+actionsJson = {
+    "print": {
+        "matrix": reps.matrix.Print,
+        "list": reps.list.Print,
+        "table": reps.table.Print
+    }
+}
 
-def printM():
-    return
+def Print():
+    actionsJson["print"][utils.selectedRep]()
