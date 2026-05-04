@@ -35,6 +35,27 @@ commandsJson = {
         "bHideFromUser": False,
         "bBenchmark": False
     },
+    "find": {
+        "function": graf.find,
+        "displayName": "Find",
+        "description": "Finds out whether a provided edge exists in the graph.",
+        "bHideFromUser": False,
+        "bBenchmark": False
+    },
+    "changerep": {
+        "function": graf.changeRep,
+        "displayName": "ChangeRep",
+        "description": "Changes the graph representation.",
+        "bHideFromUser": False,
+        "bBenchmark": False
+    },
+    "export": {
+        "function": graf.export,
+        "displayName": "Export",
+        "description": "Exports the graph to tickzpicture.",
+        "bHideFromUser": False,
+        "bBenchmark": False
+    },
     "exit": {
         "function": utils.exitProgram,
         "displayName": "Exit",

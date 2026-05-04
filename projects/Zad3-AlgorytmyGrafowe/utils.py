@@ -2,7 +2,7 @@ import sys
 
 selectedRep = None
 nodes = None
-satiration = None
+saturation = None
 grafIn = {
     "matrix": None,
     "list": None,

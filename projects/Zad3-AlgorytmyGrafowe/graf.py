@@ -3,6 +3,7 @@ import reps.list
 import reps.table
 import utils
 import random
+import math
 
 convFromTo = {
     "matrix": {
@@ -48,8 +49,49 @@ actionsJson = {
         "matrix": reps.matrix.Print,
         "list": reps.list.Print,
         "table": reps.table.Print
+    },
+    "adjacent": {
+        "matrix": reps.matrix.adjacent,
+        "list": reps.list.adjacent,
+        "table": reps.table.adjacent
+    },
+    "neighbors": {
+        "matrix": reps.matrix.neighbors,
+        "list": reps.list.neighbors,
+        "table": reps.table.neighbors
     }
 }
 
 def Print():
     actionsJson["print"][utils.selectedRep]()
+
+def find():
+    nodeId1 = utils.inputs.validPositiveNumber("from> ", 1, utils.nodes)
+    nodeId2 = utils.inputs.validPositiveNumber("  to> ", 1, utils.nodes)
+    if actionsJson["adjacent"][utils.selectedRep](nodeId1, nodeId2):
+        print(f"True: edge ({nodeId1}, {nodeId2}) exists in the graph.")
+    else: print(f"False: edge ({nodeId1}, {nodeId2}) does NOT exist in the graph.")
+
+def BFS():
+    return
+
+def changeRep():
+    allowedValues = list(convFromTo[utils.selectedRep].keys())
+    print(f"You can change the graph representation to: {' or '.join(allowedValues)}")
+    oldRep = utils.selectedRep
+    utils.selectedRep = utils.inputs.validInList(allowedValues, "type> ", f"Invalid type! Expected: {' or '.join(allowedValues)}")
+    convFromTo[oldRep][utils.selectedRep](utils.grafIn[oldRep], utils.nodes)
+
+def export():
+    nodes = utils.nodes
+    radius = max(2.5, nodes * 0.6)
+    tikz = "\\begin{tikzpicture}[>=stealth]"
+    for nodeId in range(1, nodes + 1):
+        angle = (nodeId - 1) * (360 / nodes)
+        tikz += f" \\node[circle, draw] ({nodeId}) at ({angle}:{radius:.2f}) {{{nodeId}}};"
+    for nodeId1 in range(1, nodes + 1):
+        neighbors = actionsJson["neighbors"][utils.selectedRep](nodeId1)
+        for nodeId2 in neighbors:
+            tikz += f" \\draw[->] ({nodeId1}) -- ({nodeId2});"
+    tikz += " \\end{tikzpicture}"
+    print(f"Exported graph:\n{tikz}")

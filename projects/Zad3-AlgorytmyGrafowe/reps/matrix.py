@@ -32,4 +32,17 @@ def Print():
         for nodeId2 in range(1, nodes + 1):
             print(f"{matrix[nodeId1][nodeId2]}", end = "")
             print(" " * (utils.getIntLength(nodes) - utils.getIntLength(matrix[nodeId1][nodeId2]) + 1), end = "")
-    print("\n")
+    print()
+
+def adjacent(nodeId1, nodeId2):
+    matrix = utils.grafIn["matrix"]
+    return matrix[nodeId1][nodeId2] == 1
+
+def neighbors(nodeId):
+    matrix = utils.grafIn["matrix"]
+    nodes = utils.nodes
+    listOfNeighbors = []
+    for nodeId2 in range(1, nodes + 1):
+        if matrix[nodeId][nodeId2] == 1:
+            listOfNeighbors.append(nodeId2)
+    return listOfNeighbors

@@ -27,4 +27,11 @@ def Print():
         for nodeId2 in lista[nodeId1]:
             print(f" -> {nodeId2}", end = "")
         print()
-    print()
+
+def adjacent(nodeId1, nodeId2):
+    lista = utils.grafIn["list"]
+    return nodeId2 in lista[nodeId1]
+
+def neighbors(nodeId):
+    lista = utils.grafIn["list"]
+    return lista[nodeId]
