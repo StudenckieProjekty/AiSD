@@ -46,3 +46,11 @@ def neighbors(nodeId):
         if matrix[nodeId][nodeId2] == 1:
             listOfNeighbors.append(nodeId2)
     return listOfNeighbors
+
+def entryDegree(nodeId):
+    matrix = utils.grafIn["matrix"]
+    nodes = utils.nodes
+    counter = 0
+    for nodeId2 in range(1, nodes + 1):
+        if matrix[nodeId2][nodeId] == 1: counter += 1
+    return counter

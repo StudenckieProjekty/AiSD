@@ -35,3 +35,10 @@ def neighbors(nodeId):
         if edge[0] == nodeId:
             listOfNeighbors.append(edge[1])
     return listOfNeighbors
+
+def entryDegree(nodeId):
+    table = utils.grafIn["table"]
+    counter = 0
+    for nodeId1, nodeId2 in table:
+        if nodeId2 == nodeId: counter += 1
+    return counter

@@ -42,6 +42,34 @@ commandsJson = {
         "bHideFromUser": False,
         "bBenchmark": False
     },
+    "bfs": {
+        "function": graf.BFS,
+        "displayName": "BFS",
+        "description": "Performs Breadth First Search and displays the results.",
+        "bHideFromUser": False,
+        "bBenchmark": False
+    },
+    "dfs": {
+        "function": graf.DFS,
+        "displayName": "DFS",
+        "description": "Performs Depth First Search and displays the results.",
+        "bHideFromUser": False,
+        "bBenchmark": False
+    },
+    "kahn": {
+        "function": graf.kahnSort,
+        "displayName": "Kahn",
+        "description": "Displays Kahn's topological sort results.",
+        "bHideFromUser": False,
+        "bBenchmark": False
+    },
+    "tarjan": {
+        "function": graf.tarjanSort,
+        "displayName": "Tarjan",
+        "description": "Displays Tarjan's topological sort results.",
+        "bHideFromUser": False,
+        "bBenchmark": False
+    },
     "changerep": {
         "function": graf.changeRep,
         "displayName": "ChangeRep",
@@ -64,12 +92,17 @@ commandsJson = {
         "bBenchmark": False
     }
 }
+commandAliases = {
+    "breadth-first search": "bfs",
+    "depth-first search": "dfs"
+}
 
 class menu():
     def help():
         def howManySpacesNum():
             longestWordCount = 0
             for command in commandsJson:
+                if commandsJson[command]["bHideFromUser"]: continue
                 dlugosc = len(command)
                 if dlugosc > longestWordCount: longestWordCount = dlugosc
             return longestWordCount + 3
@@ -93,12 +126,14 @@ class menu():
     def action():
         print("action> ", end = "")
         try:
-            whatToDo = utils.safeInput()
-            while whatToDo.lower() not in [i for i in commandsJson.keys() if not commandsJson[i]["bHideFromUser"]]:
+            whatToDo = utils.safeInput().lower()
+            if whatToDo in commandAliases: whatToDo = commandAliases[whatToDo]
+            while whatToDo not in [i for i in commandsJson.keys() if not commandsJson[i]["bHideFromUser"]]:
                 print("Unknown command. Try \"help\" for a list of commands\naction> ", end = "")
-                whatToDo = utils.safeInput()
+                if whatToDo in commandAliases: whatToDo = commandAliases[whatToDo]
+                whatToDo = utils.safeInput().lower()
         except EOFError: whatToDo = "exit"
-        callFunction(whatToDo.lower())
+        callFunction(whatToDo)
 
     def main():
         commandsJson["help"]["function"] = menu.help

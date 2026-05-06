@@ -35,3 +35,11 @@ def adjacent(nodeId1, nodeId2):
 def neighbors(nodeId):
     lista = utils.grafIn["list"]
     return lista[nodeId]
+
+def entryDegree(nodeId):
+    lista = utils.grafIn["list"]
+    nodes = len(lista) - 1
+    counter = 0
+    for nodeId2 in range(1, nodes + 1):
+        if nodeId in lista[nodeId2]: counter += 1
+    return counter
