@@ -16,7 +16,7 @@
 |:---:|---|:---:|:---:|:---:|
 | 1 | Algorytmy sortowania | [Folder](./projects/Zad1-AlgorytmySortowania) | 5.5 | 5.5 |
 | 2 | Złożone struktury danych | [Folder](./projects/Zad2-ZlozoneStrukturyDanych) | 5.5 | - |
-| 3 | Algorytmy grafowe (WIP) | [Folder](./projects/Zad3-AlgorytmyGrafowe) | - | - |
+| 3 | Algorytmy grafowe | [Folder](./projects/Zad3-AlgorytmyGrafowe) | - | - |
 | 4 | Algorytmy z powracaniem (TBD) | [Folder](./projects/Zad4-AlgorytmyZPowracaniem) | - | - |
 | 5 | Programowanie dynamiczne i problem plecakowy (TBD) | [Folder](./projects/Zad5-ProgramowanieDynamiczne) | - | - |
 

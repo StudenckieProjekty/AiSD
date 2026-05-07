@@ -8,93 +8,75 @@ sys.setrecursionlimit(2500000)
 parser = argparse.ArgumentParser(add_help=False)
 parser.add_argument("--generate", action="store_true")
 parser.add_argument("--user-provided", action="store_true")
-parser.add_argument("--benchmark", action="store_true")
 args = parser.parse_args()
-
-def callFunction(funcName):
-    if args.benchmark and commandsJson[funcName]["bBenchmark"]:
-        startTime = time.perf_counter()
-        commandsJson[funcName]["function"]()
-        endTime = time.perf_counter()
-        execTime = endTime - startTime
-        print(f"\n{commandsJson[funcName]['displayName']} benchmarked time: ({execTime:.6f} s)")
-    else: commandsJson[funcName]["function"]()
 
 commandsJson = {
     "help": {
         "function": None,
         "displayName": "Help",
         "description": "Shows this message.",
-        "bHideFromUser": False,
-        "bBenchmark": False
+        "bHideFromUser": False
     },
     "print": {
         "function": graf.Print,
         "displayName": "Print",
         "description": "Prints the Graph in selected data structure.",
-        "bHideFromUser": False,
-        "bBenchmark": False
+        "bHideFromUser": False
     },
     "find": {
         "function": graf.find,
         "displayName": "Find",
         "description": "Finds out whether a provided edge exists in the graph.",
-        "bHideFromUser": False,
-        "bBenchmark": False
+        "bHideFromUser": False
     },
     "bfs": {
         "function": graf.BFS,
         "displayName": "BFS",
         "description": "Performs Breadth First Search and displays the results.",
-        "bHideFromUser": False,
-        "bBenchmark": False
+        "bHideFromUser": False
     },
     "dfs": {
         "function": graf.DFS,
         "displayName": "DFS",
         "description": "Performs Depth First Search and displays the results.",
-        "bHideFromUser": False,
-        "bBenchmark": False
+        "bHideFromUser": False
     },
     "kahn": {
         "function": graf.kahnSort,
         "displayName": "Kahn",
         "description": "Displays Kahn's topological sort results.",
-        "bHideFromUser": False,
-        "bBenchmark": False
+        "bHideFromUser": False
     },
     "tarjan": {
         "function": graf.tarjanSort,
         "displayName": "Tarjan",
         "description": "Displays Tarjan's topological sort results.",
-        "bHideFromUser": False,
-        "bBenchmark": False
+        "bHideFromUser": False
     },
     "changerep": {
         "function": graf.changeRep,
         "displayName": "ChangeRep",
         "description": "Changes the graph representation.",
-        "bHideFromUser": False,
-        "bBenchmark": False
+        "bHideFromUser": False
     },
     "export": {
         "function": graf.export,
         "displayName": "Export",
         "description": "Exports the graph to tickzpicture.",
-        "bHideFromUser": False,
-        "bBenchmark": False
+        "bHideFromUser": False
     },
     "exit": {
         "function": utils.exitProgram,
         "displayName": "Exit",
         "description": "Exits the program (same as CTRL+D).",
-        "bHideFromUser": False,
-        "bBenchmark": False
+        "bHideFromUser": False
     }
 }
 commandAliases = {
     "breadth-first search": "bfs",
-    "depth-first search": "dfs"
+    "depth-first search": "dfs",
+    "kahn_sort": "kahn",
+    "tarjan_sort": "tarjan"
 }
 
 class menu():
@@ -133,7 +115,7 @@ class menu():
                 if whatToDo in commandAliases: whatToDo = commandAliases[whatToDo]
                 whatToDo = utils.safeInput().lower()
         except EOFError: whatToDo = "exit"
-        callFunction(whatToDo)
+        commandsJson[whatToDo]["function"]()
 
     def main():
         commandsJson["help"]["function"] = menu.help

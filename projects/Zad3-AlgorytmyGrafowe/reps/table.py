@@ -19,10 +19,12 @@ def convFromList(lista, nodes):
 
 def Print():
     table = utils.grafIn["table"]
+    edges = len(table)
     counter = 1
     for nodeId1, nodeId2 in table:
-        print(f"({nodeId1}, {nodeId2})", end = "\n" if counter % 4 == 0 else " ")
+        print(f"({nodeId1}, {nodeId2})", end = "\n" if counter % 4 == 0 and counter != edges else " ")
         counter += 1
+    print()
 
 def adjacent(nodeId1, nodeId2):
     table = utils.grafIn["table"]
