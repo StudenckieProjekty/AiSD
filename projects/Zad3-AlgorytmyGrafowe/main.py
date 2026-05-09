@@ -1,5 +1,4 @@
 import sys
-import time
 import argparse
 import graf
 import utils
