@@ -5,4 +5,6 @@
 ---
 
 ### 📂 Struktura plików
-- TBD
+- graf.py - funkcje dotyczące grafów
+- main.py - main program
+- utils.py - funkcje uniwersalne i inne rzeczy, które nie pasowały do innych plików

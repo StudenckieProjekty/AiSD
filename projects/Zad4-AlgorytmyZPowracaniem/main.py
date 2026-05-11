@@ -14,11 +14,26 @@ args = parser.parse_args()
 def callFunction(funcName):
     if args.benchmark and commandsJson[funcName]["bBenchmark"]:
         startTime = time.perf_counter()
-        commandsJson[funcName]["function"]()
+        result = commandsJson[funcName]["function"]()
         endTime = time.perf_counter()
         execTime = endTime - startTime
         print(f"\n{commandsJson[funcName]['displayName']} benchmarked time: ({execTime:.6f} s)")
-    else: commandsJson[funcName]["function"]()
+    else: result = commandsJson[funcName]["function"]()
+    return result
+
+def runSearchAlgorithm(algName, cycleName):
+    print("Searching...", end = " ")
+    sys.stdout.flush()
+    result = callFunction(algName)
+    if result: print("Found!\n" + ", ".join(map(str, result)))
+    else: print(f"\nThere is no {cycleName} cycle :(")
+
+def findHamilton():
+    runSearchAlgorithm("robertsFlores7312", "Hamilton")
+
+def findEuler():
+    runSearchAlgorithm("eulerCycle7312", "Euler")
+    graf.makeGrafGreatAgain()
 
 commandsJson = {
     "help": {
@@ -32,6 +47,34 @@ commandsJson = {
         "function": graf.Print,
         "displayName": "Print",
         "description": "Prints the adjacency matrix of the Graph.",
+        "bHideFromUser": False,
+        "bBenchmark": False
+    },
+    "robertsFlores7312": {
+        "function": graf.robertsFloresAlg,
+        "displayName": "FindHamilton",
+        "description": "Displays the graph's Hamilton cycle if it exists.",
+        "bHideFromUser": True,
+        "bBenchmark": True
+    },
+    "findhamilton": {
+        "function": findHamilton,
+        "displayName": "FindHamilton",
+        "description": "Displays the graph's Hamilton cycle if it exists.",
+        "bHideFromUser": False,
+        "bBenchmark": False
+    },
+    "eulerCycle7312": {
+        "function": graf.eulerDFS,
+        "displayName": "FindEuler",
+        "description": "Displays the graph's Euler cycle if it exists.",
+        "bHideFromUser": True,
+        "bBenchmark": True
+    },
+    "findeuler": {
+        "function": findEuler,
+        "displayName": "FindEuler",
+        "description": "Displays the graph's Euler cycle if it exists.",
         "bHideFromUser": False,
         "bBenchmark": False
     },
@@ -50,7 +93,12 @@ commandsJson = {
         "bBenchmark": False
     }
 }
-commandAliases = {}
+commandAliases = {
+    "hamilton": "findhamilton",
+    "hamiltoncycle": "findhamilton",
+    "euler": "findeuler",
+    "eulercycle": "findeuler"
+}
 
 class menu():
     def help():
@@ -68,12 +116,12 @@ class menu():
             print(f"{commandsJson[command]['displayName']}{' ' * (spacesCount - len(command))}{commandsJson[command]['description']}")
     
     def inputAndInitGraf():
-        utils.nodes = int(utils.inputs.validPositiveNumber("nodes> ", 11))
+        nodes = int(utils.inputs.validPositiveNumber("nodes> ", 11, 50))
         if args.hamilton:
-            utils.saturation = float(utils.inputs.validPositiveNumber("saturation> ", utils.getMinSaturation(utils.nodes), 100, float))
-            graf.argGenerate(utils.nodes, utils.saturation, True)
+            saturation = float(utils.inputs.validPositiveNumber("saturation> ", utils.getMinSaturation(nodes), 100, float))
+            graf.argGenerate(nodes, saturation, True)
         elif args.non_hamilton:
-            graf.argGenerate(utils.nodes, 50, False)
+            graf.argGenerate(nodes, 50, False)
 
     def action():
         print("action> ", end = "")
@@ -85,7 +133,7 @@ class menu():
                 if whatToDo in commandAliases: whatToDo = commandAliases[whatToDo]
                 whatToDo = utils.safeInput().lower()
         except EOFError: whatToDo = "exit"
-        commandsJson[whatToDo]["function"]()
+        callFunction(whatToDo)
 
     def main():
         commandsJson["help"]["function"] = menu.help

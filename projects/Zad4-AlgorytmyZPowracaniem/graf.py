@@ -1,13 +1,17 @@
 import utils
 import random
 import math
+import copy
+
+nodes = None
+grafCopy = None
+graf = None
+initialNodeId = None
 
 def getMatrixFilledWithZeros(size):
     return [[0] * (size) for i in range(size)]
 
 def Print():
-    matrix = utils.graf
-    nodes = len(matrix) - 1
     print(f" {' ' * utils.getIntLength(nodes)}| ", end = "")
     for nodeId in range(1, nodes + 1):
         print(f"{nodeId}" + " " * (utils.getIntLength(nodes) - utils.getIntLength(nodeId)), end = " ")
@@ -17,37 +21,38 @@ def Print():
     for nodeId1 in range(1, nodes + 1):
         print(f"\n{nodeId1} {' ' * (utils.getIntLength(nodes) - utils.getIntLength(nodeId1))}| ", end = "")
         for nodeId2 in range(1, nodes + 1):
-            print(f"{matrix[nodeId1][nodeId2]}", end = "")
-            print(" " * (utils.getIntLength(nodes) - utils.getIntLength(matrix[nodeId1][nodeId2]) + 1), end = "")
+            print(f"{graf[nodeId1][nodeId2]}", end = "")
+            print(" " * (utils.getIntLength(nodes) - utils.getIntLength(graf[nodeId1][nodeId2]) + 1), end = "")
     print()
 
+def makeGrafGreatAgain():
+    global graf, grafCopy
+    graf = copy.deepcopy(grafCopy)
+
 def setEdge(nodeId1, nodeId2, value):
-    utils.graf[nodeId1][nodeId2] = value
-    utils.graf[nodeId2][nodeId1] = value
+    graf[nodeId1][nodeId2] = value
+    graf[nodeId2][nodeId1] = value
 
 def adjacent(nodeId1, nodeId2):
-    matrix = utils.graf
-    return matrix[nodeId1][nodeId2] == 1
+    return graf[nodeId1][nodeId2] == 1
 
 def neighbors(nodeId):
-    matrix = utils.graf
-    nodes = utils.nodes
     listOfNeighbors = []
     for nodeId2 in range(1, nodes + 1):
-        if matrix[nodeId][nodeId2] == 1:
+        if graf[nodeId][nodeId2] == 1:
             listOfNeighbors.append(nodeId2)
     return listOfNeighbors
 
 def entryDegree(nodeId):
-    matrix = utils.graf
-    nodes = utils.nodes
     counter = 0
     for nodeId2 in range(1, nodes + 1):
-        if matrix[nodeId2][nodeId] == 1: counter += 1
+        if graf[nodeId2][nodeId] == 1: counter += 1
     return counter
 
-def argGenerate(nodes, saturation, bHamilton):
-    utils.graf = getMatrixFilledWithZeros(nodes + 1)
+def argGenerate(nodesCount, saturation, bHamilton):
+    global graf, grafCopy, nodes, initialNodeId
+    nodes = nodesCount
+    graf = getMatrixFilledWithZeros(nodes + 1)
     nodesList = [i for i in range(2, nodes + 1)]
     random.shuffle(nodesList)
     nodesList = [1] + nodesList + [1]
@@ -73,9 +78,44 @@ def argGenerate(nodes, saturation, bHamilton):
     if not bHamilton:
         nodeId1 = random.randint(1, nodes)
         for nodeId2 in range(1, nodes + 1): setEdge(nodeId1, nodeId2, 0)
+    grafCopy = copy.deepcopy(graf)
+    initialNodeId = next(nodeId for nodeId in range(1, nodes + 1) if neighbors(nodeId))
+
+def robertsFloresAlg():
+    nodesAndNeighbors = [[]] + [neighbors(nodeId) for nodeId in range(1, nodes + 1)]
+    stack = [initialNodeId]
+    def bVisitedAllNodes(): return len(stack) == nodes
+    while stack:
+        nodeId = stack[-1]
+        if bVisitedAllNodes() and adjacent(nodeId, initialNodeId): 
+            return stack + [1]
+        bFoundNextNode = False
+        while nodesAndNeighbors[nodeId]:
+            nextNodeId = nodesAndNeighbors[nodeId].pop()
+            if nextNodeId not in stack:
+                stack.append(nextNodeId)
+                bFoundNextNode = True
+                break
+        if not bFoundNextNode:
+            poppedNodeId = stack.pop()
+            nodesAndNeighbors[poppedNodeId] = neighbors(poppedNodeId)
+    return []
+
+eulerStack = []
+def eulerDFS(nodeId1 = None, bStartingCall = True):
+    global eulerStack, graf
+    if not nodeId1:
+        nodeId1 = initialNodeId
+        eulerStack = []
+    for nodeId2 in neighbors(nodeId1):
+        if adjacent(nodeId1, nodeId2):
+            setEdge(nodeId1, nodeId2, 0)
+            eulerDFS(nodeId2, False)
+    eulerStack.append(nodeId1)
+    if bStartingCall:
+        return eulerStack[::-1]
 
 def export():
-    nodes = utils.nodes
     radius = max(2.5, nodes * 0.6)
     tikz = "\\begin{tikzpicture}"
     for nodeId in range(1, nodes + 1):

@@ -1,10 +1,5 @@
 import sys
 
-selectedRep = None
-nodes = None
-saturation = None
-graf = None
-
 def exitProgram(statusCode = 0, message = ""):
     print(f"\n{f'{message}\n' if message else ''}Program exited with status: {statusCode}")
     sys.exit()
@@ -61,7 +56,7 @@ class inputs:
         return whatToDo
 
 def getMinSaturation(nodes):
-    return 100 * (2/nodes)
+    return 100 * (2 / (nodes - 1))
 
 def getIntLength(n):
     if n == 0: return 1
