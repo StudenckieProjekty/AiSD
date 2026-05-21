@@ -12,12 +12,12 @@
 
 ### Wykonane zadania
 
-| Nr | Nazwa zadania | Odnośnik | Ocena za Projekt | Ocena za Sprawozdanie |
-|:---:|---|:---:|:---:|:---:|
-| 1 | Algorytmy sortowania | [Folder](./projects/Zad1-AlgorytmySortowania) | 5.5 | 5.5 |
-| 2 | Złożone struktury danych | [Folder](./projects/Zad2-ZlozoneStrukturyDanych) | 5.5 | - |
-| 3 | Algorytmy grafowe | [Folder](./projects/Zad3-AlgorytmyGrafowe) | 5.5 | - |
-| 4 | Algorytmy z powracaniem | [Folder](./projects/Zad4-AlgorytmyZPowracaniem) | - | - |
-| 5 | Programowanie dynamiczne i problem plecakowy (TBD) | [Folder](./projects/Zad5-ProgramowanieDynamiczne) | - | - |
+| Nr | Nazwa zadania | Link do Projektu | Ocena za Projekt | Link do Sprawozdania | Ocena za Sprawozdanie |
+|:---:|---|:---:|:---:|:---:|:---:|
+| 1 | Algorytmy sortowania | [Folder](./projects/Zad1-AlgorytmySortowania) | 5.5 | - | 5.5 |
+| 2 | Złożone struktury danych | [Folder](./projects/Zad2-ZlozoneStrukturyDanych) | 5.5 | - | - |
+| 3 | Algorytmy grafowe | [Folder](./projects/Zad3-AlgorytmyGrafowe) | 5.5 | - | - |
+| 4 | Algorytmy z powracaniem | [Folder](./projects/Zad4-AlgorytmyZPowracaniem) | - | - | - |
+| 5 | Programowanie dynamiczne i problem plecakowy (TBD) | [Folder](./projects/Zad5-ProgramowanieDynamiczne) | - | - | - |
 
 > Ocena 5.5 stanowi "bufor bezpieczeństwa" pozwalający utrzymać końcową ocenę 5.0 w przypadku ewentualnych przyszłych potknięć.
