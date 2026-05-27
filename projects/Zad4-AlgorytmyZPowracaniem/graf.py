@@ -43,12 +43,6 @@ def neighbors(nodeId):
             listOfNeighbors.append(nodeId2)
     return listOfNeighbors
 
-def entryDegree(nodeId):
-    counter = 0
-    for nodeId2 in range(1, nodes + 1):
-        if graf[nodeId2][nodeId] == 1: counter += 1
-    return counter
-
 def argGenerate(nodesCount, saturation, bHamilton):
     global graf, grafCopy, nodes, initialNodeId
     nodes = nodesCount
