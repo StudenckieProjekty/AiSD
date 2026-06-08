@@ -74,8 +74,8 @@ class menu():
             if whatToDo in commandAliases: whatToDo = commandAliases[whatToDo]
             while whatToDo not in commandsJson.keys():
                 print("Unknown command. Try \"help\" for a list of commands\naction> ", end = "")
-                if whatToDo in commandAliases: whatToDo = commandAliases[whatToDo]
                 whatToDo = utils.safeInput().lower()
+                if whatToDo in commandAliases: whatToDo = commandAliases[whatToDo]
         except EOFError: whatToDo = "exit"
         commandsJson[whatToDo]["function"]()
 
