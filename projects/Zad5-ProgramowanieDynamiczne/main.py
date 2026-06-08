@@ -3,8 +3,6 @@ import argparse
 import backpack
 import time
 import utils
-import os
-import json
 sys.setrecursionlimit(2500000)
 
 parser = argparse.ArgumentParser(add_help=False)
@@ -24,14 +22,9 @@ def callFunctionWithBenchmark(function, arg, displayName):
 def backpackProblem():
     datasetJson = utils.readDataset()
     if not datasetJson: return
-    for dataset in datasetJson["datasets"]:
-        newJson = {
-            "backpackCapacity": datasetJson["backpackCapacity"],
-            "itemsCount": datasetJson["itemsCount"],
-            "dataset": dataset
-        }
-        if args.dynamic: callFunctionWithBenchmark(backpack.bpDynamic, newJson, "Dynamic Programming")
-        else: callFunctionWithBenchmark(backpack.bpBruteForce, newJson, "Brute force")
+    for dataset in datasetJson:
+        if args.dynamic: callFunctionWithBenchmark(backpack.bpDynamic, dataset, "Dynamic Programming")
+        else: callFunctionWithBenchmark(backpack.bpBruteForce, dataset, "Brute force")
     print("Done!")
 
 commandsJson = {

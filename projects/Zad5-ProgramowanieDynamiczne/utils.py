@@ -71,23 +71,36 @@ def createDataset():
     itemsCount = inputs.validPositiveNumber("items> ", 3)
     print("What should the max capacity (C) of the backapck be?")
     backpackCapacity = inputs.validPositiveNumber("capacity> ", 10)
-    datasetJson = {
-        "backpackCapacity": backpackCapacity,
-        "itemsCount": itemsCount,
-        "datasets": []
-    }
+    datasetJson = []
     for i in range(datasetsCount):
-        items = []
+        dataset = {
+            "backpackCapacity": backpackCapacity,
+            "itemsCount": itemsCount,
+            "items": []
+        }
         for j in range(itemsCount):
             item = {
                 "weight": random.randint(1, backpackCapacity),
                 "value": random.randint(1, 2 * backpackCapacity)
             }
-            items.append(item)
-        datasetJson["datasets"].append(items)
+            dataset["items"].append(item)
+        datasetJson.append(dataset)
     with open(getDatasetPath(), "w", encoding="utf-8") as fileToSave:
         json.dump(datasetJson, fileToSave, indent=2, ensure_ascii=False)
     print("Successfully created and saved to dataset.json")
+
+def bIsDatasetValid(datasetJson):
+    for dataset in datasetJson:
+        for key in ["backpackCapacity", "itemsCount", "items"]:
+            if key not in dataset: return False
+        for item in dataset["items"]:
+            for key in ["weight", "value"]:
+                if key not in item: return False
+                try:
+                    number = int(item[key])
+                    if not (number > 0): return False
+                except: return False
+    return True
 
 def readDataset():
     datasetPath = getDatasetPath()
@@ -99,11 +112,7 @@ def readDataset():
         with open(datasetPath, "r", encoding="utf-8") as fileToRead:
             datasetJson = json.loads(fileToRead.read())
     except: bSuccessfullyRead = False
-    for object in ["backpackCapacity", "itemsCount", "datasets"]:
-        if not object in datasetJson:
-            bSuccessfullyRead = False
-            break
-    if not bSuccessfullyRead:
-        print("Could not read the datasets.json file. Make a new one using the \"CreateDataset\" command.")
+    if not bSuccessfullyRead or not bIsDatasetValid(datasetJson):
+        print("Could not properly read the datasets.json file. Make a new one using the \"CreateDataset\" command.")
         return None
     return datasetJson
