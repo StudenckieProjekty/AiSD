@@ -1,0 +1,58 @@
+{
+  "backpackCapacity": 30,
+  "itemsCount": 6,
+  "datasets": [
+    [
+      {
+        "weight": 3,
+        "value": 43
+      },
+      {
+        "weight": 24,
+        "value": 57
+      },
+      {
+        "weight": 6,
+        "value": 14
+      },
+      {
+        "weight": 18,
+        "value": 4
+      },
+      {
+        "weight": 20,
+        "value": 59
+      },
+      {
+        "weight": 22,
+        "value": 40
+      }
+    ],
+    [
+      {
+        "weight": 26,
+        "value": 1
+      },
+      {
+        "weight": 2,
+        "value": 20
+      },
+      {
+        "weight": 1,
+        "value": 1
+      },
+      {
+        "weight": 19,
+        "value": 30
+      },
+      {
+        "weight": 19,
+        "value": 9
+      },
+      {
+        "weight": 14,
+        "value": 12
+      }
+    ]
+  ]
+}
