@@ -11,20 +11,35 @@ parser.add_argument("--brute-force", action="store_true")
 parser.add_argument("--benchmark", action="store_true")
 args = parser.parse_args()
 
-def callFunctionWithBenchmark(function, arg, displayName):
-    startTime = time.perf_counter()
-    result = function(arg)
-    endTime = time.perf_counter()
-    execTime = endTime - startTime
-    print(f"{displayName} benchmarked time: ({execTime:.6f} s)")
+def callFunctionWithBenchmark(function, functionArg, displayName):
+    if args.benchmark:
+        startTime = time.perf_counter()
+        result = function(functionArg)
+        endTime = time.perf_counter()
+        execTime = endTime - startTime
+        print(f"{displayName} benchmarked time: ({execTime:.6f} s)")
+    else: result = function(functionArg)
     return result
 
 def backpackProblem():
     datasetJson = utils.readDataset()
     if not datasetJson: return
-    for dataset in datasetJson:
-        if args.dynamic: callFunctionWithBenchmark(backpack.bpDynamic, dataset, "Dynamic Programming")
-        else: callFunctionWithBenchmark(backpack.bpBruteForce, dataset, "Brute force")
+    for i in range(len(datasetJson)):
+        dataset = datasetJson[i]
+        if args.dynamic: result = callFunctionWithBenchmark(backpack.bpDynamic, dataset, "Dynamic Programming")
+        else: result = callFunctionWithBenchmark(backpack.bpBruteForce, dataset, "Brute force")
+        print(f"Items in result for dataset #{i + 1} (Backpack capacity = {dataset["backpackCapacity"]}):")
+        totalWeight = 0
+        totalValue = 0
+        for j in range(dataset["itemsCount"]):
+            if ((result >> j) & 1) == 0: continue
+            weight = dataset["items"][j]["weight"]
+            totalWeight += weight
+            value = dataset["items"][j]["value"]
+            totalValue += value
+            print(f"Item #{j + 1}: weight = {weight}, value = {value}")
+        print(f"Total weight: {totalWeight}, Total value: {totalValue}")
+        print()
     print("Done!")
 
 commandsJson = {

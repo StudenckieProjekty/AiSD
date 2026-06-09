@@ -62,13 +62,13 @@ class inputs:
 def getDatasetPath():
     if getattr(sys, "frozen", False) or "__compiled__" in globals():
         return Path(sys.executable).parent.resolve() / "dataset.json"
-    return Path(__file__).parent.resolve() / "dateset.json"
+    return Path(__file__).parent.resolve() / "dataset.json"
 
 def createDataset():
     print("How many datasets do you want to make?")
     datasetsCount = inputs.validPositiveNumber("datasets> ", 1)
     print("How many items (n) do you want each dataset to have?")
-    itemsCount = inputs.validPositiveNumber("items> ", 3)
+    itemsCount = inputs.validPositiveNumber("items> ", 2, 25)
     print("What should the max capacity (C) of the backapck be?")
     backpackCapacity = inputs.validPositiveNumber("capacity> ", 10)
     datasetJson = []
