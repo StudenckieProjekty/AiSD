@@ -42,6 +42,11 @@ jobs:
         run: |
           python -m nuitka --assume-yes-for-downloads --onefile --lto=yes --output-dir=build4 projects/Zad4-AlgorytmyZPowracaniem/main.py
           Move-Item build4/main.exe Zad4-AlgorytmyZPowracaniem-Windows.exe
+      
+      - name: Build Zad5
+        run: |
+          python -m nuitka --assume-yes-for-downloads --onefile --lto=yes --output-dir=build5 projects/Zad5-ProgramowanieDynamiczne/main.py
+          Move-Item build5/main.exe Zad5-ProgramowanieDynamiczne-Windows.exe
           
       - name: Upload Windows Binaries
         uses: actions/upload-artifact@v4
@@ -52,6 +57,7 @@ jobs:
             Zad2-ZlozoneStrukturyDanych-Windows.exe
             Zad3-AlgorytmyGrafowe-Windows.exe
             Zad4-AlgorytmyZPowracaniem-Windows.exe
+            Zad5-ProgramowanieDynamiczne-Windows.exe
 
   build-linux:
     runs-on: ubuntu-latest
@@ -83,6 +89,11 @@ jobs:
         run: |
           python -m nuitka --assume-yes-for-downloads --onefile --lto=yes --output-dir=build4 projects/Zad4-AlgorytmyZPowracaniem/main.py
           mv build4/main.bin Zad4-AlgorytmyZPowracaniem-Linux
+      
+      - name: Build Zad5
+        run: |
+          python -m nuitka --assume-yes-for-downloads --onefile --lto=yes --output-dir=build5 projects/Zad5-ProgramowanieDynamiczne/main.py
+          mv build5/main.bin Zad5-ProgramowanieDynamiczne-Linux
           
       - name: Upload Linux Binaries
         uses: actions/upload-artifact@v4
@@ -93,6 +104,7 @@ jobs:
             Zad2-ZlozoneStrukturyDanych-Linux
             Zad3-AlgorytmyGrafowe-Linux
             Zad4-AlgorytmyZPowracaniem-Linux
+            Zad5-ProgramowanieDynamiczne-Linux
 
   create-release:
     needs: [build-windows, build-linux]
