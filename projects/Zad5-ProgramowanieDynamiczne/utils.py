@@ -60,9 +60,9 @@ class inputs:
         return whatToDo
 
 def getDatasetPath():
-    if getattr(sys, "frozen", False) or "__compiled__" in globals():
-        return Path(sys.executable).parent.resolve() / "dataset.json"
-    return Path(__file__).parent.resolve() / "dataset.json"
+    if "__compiled__" in globals(): basePath = Path(sys.argv[0]).parent.resolve()
+    else: basePath = Path(__file__).parent.resolve()
+    return basePath / "dataset.json"
 
 def createDataset():
     print("How many datasets do you want to make?")
