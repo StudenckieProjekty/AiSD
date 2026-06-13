@@ -28,7 +28,7 @@ def backpackProblem():
         dataset = datasetJson[i]
         if args.dynamic: result = callFunctionWithBenchmark(backpack.bpDynamic, dataset, "Dynamic Programming")
         else: result = callFunctionWithBenchmark(backpack.bpBruteForce, dataset, "Brute force")
-        print(f"Items in result for dataset #{i + 1} (Backpack capacity = {dataset["backpackCapacity"]}):")
+        print(f"Items in result for dataset #{i + 1} (Backpack capacity = {dataset['backpackCapacity']}):")
         totalWeight = 0
         totalValue = 0
         for j in range(dataset["itemsCount"]):
