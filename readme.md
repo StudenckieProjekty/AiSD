@@ -18,6 +18,6 @@
 | 2 | Złożone struktury danych | [Folder](./projects/Zad2-ZlozoneStrukturyDanych) | 5.5 | [Plik PDF](./reports/Zad2-ZlozoneStrukturyDanych.pdf) | 5 |
 | 3 | Algorytmy grafowe | [Folder](./projects/Zad3-AlgorytmyGrafowe) | 5.5 | [Plik PDF](./reports/Zad3-AlgorytmyGrafowe.pdf) | 5 |
 | 4 | Algorytmy z powracaniem | [Folder](./projects/Zad4-AlgorytmyZPowracaniem) | 5.5 | [Plik PDF](./reports/Zad4-AlgorytmyZPowracaniem.pdf) | 5 |
-| 5 | Programowanie Dynamiczne (WIP) | [Folder](./projects/Zad5-ProgramowanieDynamiczne) | - | TBD | - |
+| 5 | Programowanie Dynamiczne | [Folder](./projects/Zad5-ProgramowanieDynamiczne) | - | [Film na YT](https://youtu.be/8CrMpdBGBjo) | Nie dotyczy |
 
-> Ocena 5.5 stanowi "bufor bezpieczeństwa" pozwalający utrzymać końcową ocenę 5.0 w przypadku ewentualnych przyszłych potknięć.
+> Ocena 5.5 stanowi tzw. "bufor bezpieczeństwa" pozwalający utrzymać końcową ocenę 5.0 w przypadku ewentualnych przyszłych potknięć.
