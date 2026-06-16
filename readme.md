@@ -21,3 +21,5 @@
 | 5 | Programowanie Dynamiczne | [Folder](./projects/Zad5-ProgramowanieDynamiczne) | - | [Film na YT](https://youtu.be/8CrMpdBGBjo) | Nie dotyczy |
 
 > Ocena 5.5 stanowi tzw. "bufor bezpieczeństwa" pozwalający utrzymać końcową ocenę 5.0 w przypadku ewentualnych przyszłych potknięć.
+
+Z zakładki [Releases](../../releases) można pobrać skompilowane przez GitHub Actions programy pod Windowsa oraz Linuxa.
